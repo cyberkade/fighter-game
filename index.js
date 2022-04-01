@@ -8,6 +8,24 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.7;
 
+const keys = {
+  a: {
+    pressed: false,
+  },
+  d: {
+    pressed: false,
+  },
+  ArrowLeft: {
+    pressed: false,
+  },
+  ArrowRight: {
+    pressed: false,
+  },
+};
+
+let gameOver = false;
+console.log(gameOver);
+
 class Sprite {
   constructor({ position, velocity, color = "purple", offset }) {
     this.position = position;
@@ -23,6 +41,7 @@ class Sprite {
     };
     this.color = color;
     this.isattacking;
+    this.health = 100;
   }
 
   draw() {
@@ -56,10 +75,13 @@ class Sprite {
   }
 
   attack() {
-    this.isAttacking = true;
-    setTimeout(() => {
-      this.isAttacking = false;
-    }, 100);
+    if (this.health > 0) {
+      this.isAttacking = true;
+
+      setTimeout(() => {
+        this.isAttacking = false;
+      }, 100);
+    }
   }
 }
 
@@ -76,21 +98,6 @@ const enemy = new Sprite({
   color: "blue",
 });
 
-const keys = {
-  a: {
-    pressed: false,
-  },
-  d: {
-    pressed: false,
-  },
-  ArrowLeft: {
-    pressed: false,
-  },
-  ArrowRight: {
-    pressed: false,
-  },
-};
-
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
     rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
@@ -103,8 +110,38 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
+function determineWinner({ player, enemy, timerId }) {
+  clearTimeout(timerId);
+  const result = document.querySelector("#gameOverText");
+  result.style.display = "flex";
+  if (player.health === enemy.health) {
+    result.innerHTML = "Tie";
+  } else if (player.health > enemy.health) {
+    result.innerHTML = "Player 1 Wins";
+  } else if (player.health < enemy.health) {
+    result.innerHTML = "Player 2 Wins";
+  }
+  gameOver = true;
+}
+
+let timer = 60;
+let timerId;
+function handleTimer() {
+  if (timer > 0) {
+    timer--;
+    document.querySelector("#timer").innerHTML = timer;
+    timerId = setTimeout(handleTimer, 1000);
+  }
+
+  if (timer === 0 && gameOver === false) {
+    determineWinner({ player, enemy, timerId });
+  }
+}
+
 function animate() {
+  //   if (gameOver === false) {
   window.requestAnimationFrame(animate);
+  //   }
   context.fillStyle = "white";
   context.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
@@ -114,16 +151,24 @@ function animate() {
   enemy.velocity.x = 0;
 
   //player movement
-  if (keys.a.pressed && player.lastKey === "a") {
+  if (player.health > 0 && keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -5;
-  } else if (keys.d.pressed && player.lastKey === "d") {
+  } else if (player.health > 0 && keys.d.pressed && player.lastKey === "d") {
     player.velocity.x = 5;
   }
 
   //enemy movement
-  if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
+  if (
+    enemy.health > 0 &&
+    keys.ArrowLeft.pressed &&
+    enemy.lastKey === "ArrowLeft"
+  ) {
     enemy.velocity.x = -5;
-  } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
+  } else if (
+    enemy.health > 0 &&
+    keys.ArrowRight.pressed &&
+    enemy.lastKey === "ArrowRight"
+  ) {
     enemy.velocity.x = 5;
   }
 
@@ -133,19 +178,27 @@ function animate() {
     player.isAttacking
   ) {
     player.isAttacking = false;
-    console.log("go");
+    enemy.health -= 20;
+    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
   if (
     rectangularCollision({ rectangle1: enemy, rectangle2: player }) &&
     enemy.isAttacking
   ) {
     enemy.isAttacking = false;
-    console.log("enemy attack hit");
+    player.health -= 20;
+    document.querySelector("#playerHealth").style.width = player.health + "%";
+  }
+
+  //end game based on health
+  if (enemy.health <= 0 || player.health <= 0) {
+    if (gameOver === false) {
+      determineWinner({ player, enemy, timerId });
+    }
   }
 }
 
-animate();
-
+//event listeners for movement
 window.addEventListener("keydown", (event) => {
   switch (event.key) {
     case "d":
@@ -199,3 +252,6 @@ window.addEventListener("keyup", (event) => {
       break;
   }
 });
+
+handleTimer();
+animate();
