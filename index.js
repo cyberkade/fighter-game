@@ -26,72 +26,13 @@ const keys = {
 let gameOver = false;
 console.log(gameOver);
 
-class Sprite {
-  constructor({ position, velocity, color = "purple", offset }) {
-    this.position = position;
-    this.velocity = velocity;
-    this.height = 150;
-    this.width = 50;
-    this.lastKey;
-    this.attackBox = {
-      position: { x: this.position.x, y: this.position.y },
-      offset,
-      width: 100,
-      height: 50,
-    };
-    this.color = color;
-    this.isattacking;
-    this.health = 100;
-  }
-
-  draw() {
-    context.fillStyle = this.color;
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-    // attack box draw
-    if (this.isAttacking) {
-      context.fillStyle = "green";
-      context.fillRect(
-        this.attackBox.position.x,
-        this.attackBox.position.y,
-        this.attackBox.width,
-        this.attackBox.height
-      );
-    }
-  }
-
-  update() {
-    this.draw();
-    this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
-    this.attackBox.position.y = this.position.y;
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-
-    if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-      this.velocity.y = 0;
-    } else {
-      this.velocity.y += gravity;
-    }
-  }
-
-  attack() {
-    if (this.health > 0) {
-      this.isAttacking = true;
-
-      setTimeout(() => {
-        this.isAttacking = false;
-      }, 100);
-    }
-  }
-}
-
-const player = new Sprite({
+const player = new Fighter({
   position: { x: 0, y: 0 },
   velocity: { x: 0, y: 10 },
   offset: { x: 0, y: 0 },
 });
 
-const enemy = new Sprite({
+const enemy = new Fighter({
   position: { x: 900, y: 50 },
   velocity: { x: 0, y: 10 },
   offset: { x: 50, y: 0 },
