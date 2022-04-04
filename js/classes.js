@@ -104,12 +104,19 @@ class Fighter extends Sprite {
 
     this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
     this.attackBox.position.y = this.position.y - this.attackBox.offset.y;
-    context.fillRect(
-      this.attackBox.position.x,
-      this.attackBox.position.y,
-      this.attackBox.width,
-      this.attackBox.height
-    );
+
+    // draw attack box
+    // context.fillStyle = "red";
+    // context.fillRect(
+    //   this.attackBox.position.x,
+    //   this.attackBox.position.y,
+    //   this.attackBox.width,
+    //   this.attackBox.height
+    // );
+
+    // draw sprite position
+    // context.fillStyle = "green";
+    // context.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
@@ -123,12 +130,33 @@ class Fighter extends Sprite {
     }
   }
 
+  takeHit() {
+    this.health -= 20;
+    this.switchSprite("takeHit");
+  }
+
+  attack() {
+    if (this.health > 0) {
+      this.switchSprite("attack1");
+      this.isAttacking = true;
+    }
+  }
+
   switchSprite(sprite) {
+    //override all other animations with attack animation
     if (
       this.image === this.sprites.attack1.image &&
       this.framesCurrent < this.sprites.attack1.framesMax - 1
     )
       return;
+
+    // override animations when fighter gets hit
+    if (
+      this.image === this.sprites.takeHit.image &&
+      this.framesCurrent < this.sprites.takeHit.framesMax - 1
+    )
+      return;
+
     switch (sprite) {
       case "idle":
         if (this.image !== this.sprites.idle.image) {
@@ -161,19 +189,20 @@ class Fighter extends Sprite {
         break;
       case "attack1":
         if (this.image !== this.sprites.attack1.image) {
-          this.framesHold = 10;
+          this.framesHold = 5;
           this.image = this.sprites.attack1.image;
           this.framesMax = this.sprites.attack1.framesMax;
           this.framesCurrent = 0;
         }
         break;
-    }
-  }
-
-  attack() {
-    if (this.health > 0) {
-      this.switchSprite("attack1");
-      this.isAttacking = true;
+      case "takeHit":
+        if (this.image !== this.sprites.takeHit.image) {
+          // this.framesHold = 5;
+          this.image = this.sprites.takeHit.image;
+          this.framesMax = this.sprites.takeHit.framesMax;
+          this.framesCurrent = 0;
+        }
+        break;
     }
   }
 }
