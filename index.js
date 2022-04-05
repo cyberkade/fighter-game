@@ -136,6 +136,7 @@ const enemy = new Fighter({
     width: 185,
     height: 50,
   },
+  name: "evilWizard",
 });
 
 function animate() {
@@ -146,6 +147,8 @@ function animate() {
   context.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
+  context.fillStyle = "rgba(255,255,255, 0.1)";
+  context.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
   enemy.update();
 
@@ -204,7 +207,10 @@ function animate() {
   ) {
     enemy.takeHit();
     player.isAttacking = false;
-    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    // document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    gsap.to("#enemyHealth", {
+      width: enemy.health + "%",
+    });
   }
   // missed attack player
   if (player.isAttacking && player.framesCurrent === 4) {
@@ -219,7 +225,9 @@ function animate() {
   ) {
     player.takeHit();
     enemy.isAttacking = false;
-    document.querySelector("#playerHealth").style.width = player.health + "%";
+    gsap.to("#playerHealth", {
+      width: player.health + "%",
+    });
   }
 
   // missed attack enemy

@@ -5,6 +5,7 @@ class Sprite {
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
+    framesCurrent = 0,
   }) {
     this.position = position;
     this.height = 150;
@@ -13,24 +14,52 @@ class Sprite {
     this.image.src = imgSrc;
     this.scale = scale;
     this.framesMax = framesMax;
-    this.framesCurrent = 0;
+    this.framesCurrent = framesCurrent;
     this.framesElapsed = 0;
     this.framesHold = 15;
     this.offset = offset;
+    this.name;
   }
 
   draw() {
-    context.drawImage(
-      this.image,
-      this.framesCurrent * (this.image.width / this.framesMax),
-      0,
-      this.image.width / this.framesMax,
-      this.image.height,
-      this.position.x - this.offset.x,
-      this.position.y - this.offset.y,
-      (this.image.width / this.framesMax) * this.scale,
-      this.image.height * this.scale
-    );
+    if (this.name === "evilWizard") {
+      context.drawImage(
+        this.image,
+        (this.framesMax - this.framesCurrent - 1) *
+          (this.image.width / this.framesMax),
+        0,
+        this.image.width / this.framesMax,
+        this.image.height,
+        this.position.x - this.offset.x,
+        this.position.y - this.offset.y,
+        (this.image.width / this.framesMax) * this.scale,
+        this.image.height * this.scale
+      );
+    } else {
+      context.drawImage(
+        this.image,
+        this.framesCurrent * (this.image.width / this.framesMax),
+        0,
+        this.image.width / this.framesMax,
+        this.image.height,
+        this.position.x - this.offset.x,
+        this.position.y - this.offset.y,
+        (this.image.width / this.framesMax) * this.scale,
+        this.image.height * this.scale
+      );
+    }
+
+    // context.drawImage(
+    //   this.image,
+    //   this.framesCurrent * (this.image.width / this.framesMax),
+    //   0,
+    //   this.image.width / this.framesMax,
+    //   this.image.height,
+    //   this.position.x - this.offset.x,
+    //   this.position.y - this.offset.y,
+    //   (this.image.width / this.framesMax) * this.scale,
+    //   this.image.height * this.scale
+    // );
   }
 
   animateFrames() {
@@ -58,6 +87,7 @@ class Fighter extends Sprite {
     imgSrc,
     scale = 1,
     framesMax = 1,
+    framesCurrent = 0,
     offset = { x: 0, y: 0 },
     sprites,
     attackBox = {
@@ -65,12 +95,14 @@ class Fighter extends Sprite {
       width: undefined,
       height: undefined,
     },
+    name,
   }) {
     super({
       position,
       imgSrc,
       scale,
       framesMax,
+      framesCurrent,
       offset,
     });
 
@@ -85,6 +117,7 @@ class Fighter extends Sprite {
       height: attackBox.height,
     };
     this.color = color;
+    this.name = name;
     this.isattacking;
     this.health = 100;
     this.framesCurrent = 0;
@@ -99,11 +132,39 @@ class Fighter extends Sprite {
     }
   }
 
+  // draw() {
+  //   if (this.name === "evilWizard") {
+  //     context.drawImage(
+  //       this.image,
+  //       (this.framesMax - this.framesCurrent - 1) *
+  //         (this.image.width / this.framesMax),
+  //       0,
+  //       this.image.width / this.framesMax,
+  //       this.image.height,
+  //       this.position.x - this.offset.x,
+  //       this.position.y - this.offset.y,
+  //       (this.image.width / this.framesMax) * this.scale,
+  //       this.image.height * this.scale
+  //     );
+  //   } else {
+  //     context.drawImage(
+  //       this.image,
+  //       this.framesCurrent * (this.image.width / this.framesMax),
+  //       0,
+  //       this.image.width / this.framesMax,
+  //       this.image.height,
+  //       this.position.x - this.offset.x,
+  //       this.position.y - this.offset.y,
+  //       (this.image.width / this.framesMax) * this.scale,
+  //       this.image.height * this.scale
+  //     );
+  //   }
+  // }
+
   takeHit() {
     this.health -= 20;
 
     if (this.health <= 0) {
-      console.log("dead");
       this.switchSprite("death");
     } else {
       this.switchSprite("takeHit");
