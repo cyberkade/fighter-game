@@ -24,7 +24,6 @@ const keys = {
 };
 
 let gameOver = false;
-console.log(gameOver);
 
 const background = new Sprite({
   position: { x: 0, y: 0 },
@@ -140,9 +139,7 @@ const enemy = new Fighter({
 });
 
 function animate() {
-  //   if (gameOver === false) {
   window.requestAnimationFrame(animate);
-  //   }
   context.fillStyle = "white";
   context.fillRect(0, 0, canvas.width, canvas.height);
   background.update();

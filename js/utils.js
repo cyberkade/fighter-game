@@ -24,7 +24,7 @@ function determineWinner({ player, enemy, timerId }) {
   gameOver = true;
 }
 
-let timer = 60;
+let timer = 61;
 let timerId;
 function handleTimer() {
   if (timer > 0) {
