@@ -207,10 +207,7 @@ function animate() {
   ) {
     enemy.takeHit();
     player.isAttacking = false;
-    // document.querySelector("#enemyHealth").style.width = enemy.health + "%";
-    gsap.to("#enemyHealth", {
-      width: enemy.health + "%",
-    });
+    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
   // missed attack player
   if (player.isAttacking && player.framesCurrent === 4) {
@@ -225,9 +222,7 @@ function animate() {
   ) {
     player.takeHit();
     enemy.isAttacking = false;
-    gsap.to("#playerHealth", {
-      width: player.health + "%",
-    });
+    document.querySelector("#playerHealth").style.width = player.health + "%";
   }
 
   // missed attack enemy
@@ -255,7 +250,7 @@ window.addEventListener("keydown", (event) => {
       player.lastKey = "a";
       break;
     case "w":
-      if (player.health > 0) {
+      if (player.health > 0 && player.velocity.y === 0) {
         player.velocity.y = -20;
       }
       break;
@@ -273,7 +268,7 @@ window.addEventListener("keydown", (event) => {
       enemy.lastKey = "ArrowLeft";
       break;
     case "ArrowUp":
-      if (enemy.health > 0) {
+      if (enemy.health > 0 && enemy.velocity.y === 0) {
         enemy.velocity.y = -20;
       }
       break;
