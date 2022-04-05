@@ -48,18 +48,6 @@ class Sprite {
         this.image.height * this.scale
       );
     }
-
-    // context.drawImage(
-    //   this.image,
-    //   this.framesCurrent * (this.image.width / this.framesMax),
-    //   0,
-    //   this.image.width / this.framesMax,
-    //   this.image.height,
-    //   this.position.x - this.offset.x,
-    //   this.position.y - this.offset.y,
-    //   (this.image.width / this.framesMax) * this.scale,
-    //   this.image.height * this.scale
-    // );
   }
 
   animateFrames() {
@@ -132,35 +120,6 @@ class Fighter extends Sprite {
     }
   }
 
-  // draw() {
-  //   if (this.name === "evilWizard") {
-  //     context.drawImage(
-  //       this.image,
-  //       (this.framesMax - this.framesCurrent - 1) *
-  //         (this.image.width / this.framesMax),
-  //       0,
-  //       this.image.width / this.framesMax,
-  //       this.image.height,
-  //       this.position.x - this.offset.x,
-  //       this.position.y - this.offset.y,
-  //       (this.image.width / this.framesMax) * this.scale,
-  //       this.image.height * this.scale
-  //     );
-  //   } else {
-  //     context.drawImage(
-  //       this.image,
-  //       this.framesCurrent * (this.image.width / this.framesMax),
-  //       0,
-  //       this.image.width / this.framesMax,
-  //       this.image.height,
-  //       this.position.x - this.offset.x,
-  //       this.position.y - this.offset.y,
-  //       (this.image.width / this.framesMax) * this.scale,
-  //       this.image.height * this.scale
-  //     );
-  //   }
-  // }
-
   takeHit() {
     this.health -= 20;
 
@@ -180,6 +139,9 @@ class Fighter extends Sprite {
 
   update() {
     this.draw();
+    if (this.health <= 0) {
+      this.switchSprite("death");
+    }
     if (!this.dead) this.animateFrames();
 
     this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
