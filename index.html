@@ -19,6 +19,57 @@
         box-sizing: border-box;
         font-family: "Press Start 2P", cursive;
       }
+      .controls {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 100%;
+        height: 70%;
+      }
+      .hide {
+        display: none !important;
+      }
+      .key {
+        display: flex;
+        flex-flow: column nowrap;
+        text-align: center;
+      }
+      .movement {
+        display: flex;
+        justify-content: space-between;
+        width: 70%;
+      }
+      #restart {
+        position: absolute;
+        top: 490px;
+        left: 435px;
+        padding: 15px 20px;
+        background: black;
+        cursor: pointer;
+        color: white;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      #start {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        justify-content: space-around;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(2px);
+        color: white;
+      }
+      .startBtn {
+        position: absolute;
+        top: 490px;
+        padding: 15px 20px;
+        background: black;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body
@@ -133,6 +184,41 @@
         "
       >
         Tie
+      </div>
+      <div id="restart">RESTART</div>
+      <div id="start">
+        <div class="controls">
+          <div class="key"><img src="./images/keyW.png" alt="W Key" />Jump</div>
+
+          <div class="movement">
+            <div class="key">
+              <img src="./images/keyA.png" alt="A Key" />Left
+            </div>
+            <div class="key">
+              <img src="./images/keyD.png" alt="D Key" />Right
+            </div>
+          </div>
+          <div class="key">
+            <img src="./images/keySpace.png" alt="Space Key" />Attack
+          </div>
+        </div>
+        <div class="controls">
+          <div class="key">
+            <img src="./images/keyUp.png" alt="Arrow Up Key" />Jump
+          </div>
+          <div class="movement">
+            <div class="key">
+              <img src="./images/keyLeft.png" alt="Arrow Left Key" />Left
+            </div>
+            <div class="key">
+              <img src="./images/keyRight.png" alt="Arrow Right Key" />Right
+            </div>
+          </div>
+          <div class="key">
+            <img src="./images/keyDown.png" alt="Arrow Down Key" />Attack
+          </div>
+        </div>
+        <div class="startBtn">START</div>
       </div>
       <canvas></canvas>
     </div>

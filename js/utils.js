@@ -13,7 +13,9 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 function determineWinner({ player, enemy, timerId }) {
   clearTimeout(timerId);
   const result = document.querySelector("#gameOverText");
+  const restart = document.querySelector("#restart");
   result.style.display = "flex";
+  restart.style.display = "flex";
   if (player.health === enemy.health) {
     result.innerHTML = "Tie";
   } else if (player.health > enemy.health) {
@@ -24,13 +26,15 @@ function determineWinner({ player, enemy, timerId }) {
   gameOver = true;
 }
 
-let timer = 61;
+let timer = 60;
 let timerId;
 function handleTimer() {
-  if (timer > 0) {
-    timer--;
-    document.querySelector("#timer").innerHTML = timer;
-    timerId = setTimeout(handleTimer, 1000);
+  if (!gameOver) {
+    if (timer > 0) {
+      timer--;
+      document.querySelector("#timer").innerHTML = timer;
+      timerId = setTimeout(handleTimer, 1000);
+    }
   }
 
   if (timer === 0 && gameOver === false) {
